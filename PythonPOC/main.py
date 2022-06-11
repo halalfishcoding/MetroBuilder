@@ -119,7 +119,6 @@ def print_map():
                 to_print.append(curr_station)
 
                 while True:
-                    ('../
                     if curr_station in terminal_stations:
 
                         break
