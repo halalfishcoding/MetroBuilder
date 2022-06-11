@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MetroBuilder</title>
+    <script src="https://unpkg.com/konva@8.3.5/konva.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.9/sweetalert2.min.css"
+        integrity="sha512-cyIcYOviYhF0bHIhzXWJQ/7xnaBuIIOecYoPZBgJHQKFPo+TOBA+BY1EnTpmM8yKDU4ZdI3UGccNGCEUdfbBqw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.9/sweetalert2.all.min.js"
+        integrity="sha512-IZ95TbsPTDl3eT5GwqTJH/14xZ2feLEGJRbII6bRKtE/HC6x3N4cHye7yyikadgAsuiddCY2+6gMntpVHL1gHw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link rel="stylesheet" href="css/app.css" />
+    <script defer src="src/lineSystem.js"></script>
+    <script defer src="src/eventListeners.js"></script>
+    <script defer src="src/graphics.js"></script>
+    <script defer src="src/dropdown.js"></script>
+    <script defer src="src/cardmenu.js"></script>
+
+
+    <style>
+
+    </style>
+</head>
+
+<body id="body" oncontextmenu="return false;">
+
+    <div id="sidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#">MetroBuilder</a>
+        <a href="#">Account</a>
+        <a href="#">About</a>
+    </div>
+    <script>
+        function openNav() {
+            document.getElementById("sidenav").style.width = "300px";
+        }
+
+        /* Set the width of the side navigation to 0 */
+        function closeNav() {
+            document.getElementById("sidenav").style.width = "0";
+        }
+    </script>
+
+    <div id="context-menu">
+        <div id="newLine" class="item globalMenu">New Line</div>
+        <div id="newStation" class="item globalMenu lineMenu">New Station</div>
+        <div id="help" class="item globalMenu">Help</div>
+        <div id="edit" class="item stationMenu">Edit</div>
+        <div id="viewDetails" class="item stationMenu">View Details</div>
+        <div id="delete" class="item stationMenu">Delete</div>
+        <!-- <div class="item">Option 4</div>
+        <div class="item">Option 5</div> -->
+    </div>
+    <div class="menu" id="menu">
+        <div id="horizontal">
+            <button class="button" onclick="openNav()"><i class="fa-solid fa-bars"></i></button>
+            <button class="button" onclick="newLine()">New Line</button>
+            <button class="button" onclick="newStation()">New Station</button>
+        </div>
+        <div id="vertical">
+            <br>
+            <button class="button"><i class="fa-solid fa-plus"></i></button>
+            <br>
+            <br>
+            <input type="range" id="slider" min="0.1798587899092139" max="8" value="1" class="vertical"
+                orient="vertical" />
+            <br>
+            <br>
+            <button class="button"><i class="fa-solid fa-minus"></i></button>
+
+        </div>
+    </div>
+    <div style="display: none;z-index: 400000;" id="cardMenu">
+        <div id="infoMenu">
+            <div class="card"
+                style="width:300px;z-index:10000;card-shadow: 1;right: 0;margin-right:10px;margin-top: 10px;position:fixed;">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                        <img id="stockImage" src="/img/rollingstock/sstock.jpg" alt="Placeholder image">
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <div id="titleContainer">
+                                <p class="title is-4" id="lineTitle" style="color:white;"> Line</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content">
+
+
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <a href="javascript:" class="card-footer-item">Draw</a>
+                    <a onclick="cardEditMenu()" class="card-footer-item">Edit</a>
+                    <a href="javascript:" class="card-footer-item">Delete</a>
+                </footer>
+            </div>
+        </div>
+        <div id="editMenu" style="display:none">
+            <div class="card"
+                style="width:350px;z-index:10000;card-shadow: 1;right: 0;margin-right:10px;margin-top: 10px;position:fixed;">
+                <div class="card-content">
+                    <div class="content">
+                        <p class="buttons">
+                            <button onclick="goBack()" class="button is-small">
+                                <span class="icon is-small">
+                                    <i class="fa-solid fa-arrow-left"></i>
+                                </span>
+                            </button>
+                        </p>
+                        <ul>
+
+                            <button style="float: left;" class="button is-white"><strong>Colour</strong></button>
+                            <div style="float:right" class="select">
+                                <select id="colourSelect">
+                                    <option>Red</option>
+                                    <option>Orange</option>
+                                    <option>Yellow</option>
+                                    <option>Green</option>
+                                    <option>Blue</option>
+                                    <option>Purple</option>
+                                    <option>Gray</option>
+                                </select>
+                            </div>
+                            <br>
+                            <br>
+                            <button class="button is-white"><strong>Rolling Stock</strong></button>
+                            <div style="float:right" class="select">
+                                <select id="stockSelect">
+                                    <option>S8 Stock</option>
+                                    <option>2009 Stock</option>
+                                    <option>1996 Stock</option>
+                                    <option>1992 Stock</option>
+                                    <option>1973 Stock</option>
+                                    <option>1972 Stock</option>
+                                </select>
+                            </div>
+                        </ul>
+                        <br>
+                    </div>
+                </div>
+                <br>
+
+                <footer class="card-footer">
+                    <a onclick="saveEdits()" class="card-footer-item">Save</a>
+                    <a onclick="goBack()" class="card-footer-item">Cancel</a>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <div id="container"></div>
+
+
+</body>
+
+</html>
